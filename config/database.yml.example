@@ -1,0 +1,6 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: sotwi-collector_development
+  pool: 2
+  username: alex

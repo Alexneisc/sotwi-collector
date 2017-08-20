@@ -1,21 +1,14 @@
 require 'sinatra'
 require 'twitter'
 require 'sinatra/activerecord'
+require_relative 'config/twitter.rb'
 
 project_root = File.dirname(File.absolute_path(__FILE__))
 Dir.glob(project_root + '/models/*.rb').each{|f| require_relative f}
-Dir.glob(project_root + '/config/*.rb').each{|f| require_relative f}
 
-# get '/' do
-#   "I'm Sotwi!"
-# end
-#
-# client = Twitter::Streaming::Client.new do |config|
-#   config.consumer_key        = "PiPaefX8EkMbhtuEECzLvuSZC"
-#   config.consumer_secret     = "8f2LYKRLnE6y27XrdpXN8aTNhIlN77hii415d9bKmRVNAp1Wpe"
-#   config.access_token        = "1074779419-Jin5CFs7uE9ZzWfM4Jp70KLkKMfYuyZK17a5l0N"
-#   config.access_token_secret = "AypQKSAM7S7eCQknLq3MtYLubT6YKaCiwPdgt0YFq2etv"
-# end
+get '/' do
+  "I'm Sotwi!"
+end
 
 begin
   TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
