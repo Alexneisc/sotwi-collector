@@ -1,4 +1,4 @@
-server '178.62.112.163', user: 'deploy', roles: %w{web app db}, primary: true
+server '81.2.242.153', user: 'deploy', roles: %w{web app db}, primary: true
 set :ssh_options, { forward_agent: true }
 
 

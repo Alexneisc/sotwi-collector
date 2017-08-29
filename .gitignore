@@ -13,6 +13,5 @@
 !/log/.keep
 !/tmp/.keep
 
-config/database.yml
-config/secrets.yml
 config/twitter.rb
+config/sidekiq.rb
