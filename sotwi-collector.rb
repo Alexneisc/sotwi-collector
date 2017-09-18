@@ -1,8 +1,10 @@
 require 'twitter'
 require 'sidekiq'
 require 'active_support/core_ext/time/calculations'
+require 'telegram/bot'
 require_relative 'config/twitter.rb'
 require_relative 'config/sidekiq.rb'
+require_relative 'config/telegram.rb'
 
 class NewTweetWorker
   include Sidekiq::Worker
@@ -10,9 +12,9 @@ end
 
 telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
 
-telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: 'Bot init')
-
 begin
+  telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: 'Bot is started')
+
   TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
     puts "ID: #{tweet.id}"
     puts "USER ID: #{tweet.user.id}"
