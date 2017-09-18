@@ -1,19 +1,17 @@
-# require 'sinatra'
 require 'twitter'
 require 'sidekiq'
-# require 'sinatra/activerecord'
 require 'active_support/core_ext/time/calculations'
 require_relative 'config/twitter.rb'
 require_relative 'config/sidekiq.rb'
-
-# project_root = File.dirname(File.absolute_path(__FILE__))
-# Dir.glob(project_root + '/models/*.rb').each{|f| require_relative f}
 
 class NewTweetWorker
   include Sidekiq::Worker
 end
 
+telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
+
 begin
+  telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: 'Bot started')
   TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
     puts "ID: #{tweet.id}"
     puts "USER ID: #{tweet.user.id}"
@@ -34,11 +32,17 @@ begin
 
   end
 rescue ::Twitter::Error::TooManyRequests => e
-  puts "Oh shit here come data error #{e.inspect}"
-  puts e.rate_limit.inspect
-  puts e.rate_limit.limit
-  puts e.rate_limit.remaining
-  puts e.rate_limit.reset_at
-  puts e.rate_limit.reset_in
+  text = "Twitter bot stopped working\n"
+  text += "#{Time.current}\n"
+  text += "#{e.inspect}\n"
+  text += "#{e.rate_limit.inspect}\n"
+  text += "#{e.rate_limit.limit}\n"
+  text += "#{e.rate_limit.remaining}\n"
+  text += "#{e.rate_limit.reset_at}\n"
+  text += "#{e.rate_limit.reset_in}"
+
+  telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
+
+  telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
   raise e
 end
