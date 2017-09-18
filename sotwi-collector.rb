@@ -10,10 +10,10 @@ class NewTweetWorker
   include Sidekiq::Worker
 end
 
-telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
+TELEGRAM_BOT = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
 
 begin
-  telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: 'Bot is started')
+  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: "Bot is started\n Server time: #{Time.current}")
 
   TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
     puts "ID: #{tweet.id}"
@@ -44,8 +44,6 @@ rescue ::Twitter::Error::TooManyRequests => e
   text += "#{e.rate_limit.reset_at}\n"
   text += "#{e.rate_limit.reset_in}"
 
-  telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
-
-  telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
+  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
   raise e
 end
