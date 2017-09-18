@@ -10,8 +10,9 @@ end
 
 telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
 
+telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: 'Bot init')
+
 begin
-  telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: 'Bot started')
   TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
     puts "ID: #{tweet.id}"
     puts "USER ID: #{tweet.user.id}"
