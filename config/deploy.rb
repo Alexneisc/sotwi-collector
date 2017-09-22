@@ -30,3 +30,13 @@ end
 namespace :deploy do
   after :finishing, 'sotwi_collector_daemon:restart'
 end
+
+task :status do
+  on roles(:app) do
+    within release_path do
+      with rack_env: fetch(:rack_env) do
+        execute :bundle, "exec ruby sotwi-collector-daemon.rb status"
+      end
+    end
+  end
+end
