@@ -16,13 +16,13 @@ begin
   TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: "Bot is started\n Server time: #{Time.current}")
 
   TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
-    puts "ID: #{tweet.id}"
-    puts "USER ID: #{tweet.user.id}"
-    puts "USER NAME: #{tweet.user.name}"
-    puts "USER SCREEN NAME: #{tweet.user.screen_name}"
-    puts "TEXT: #{tweet.text}"
-    puts "CURRENT TIME: #{Time.current}"
-    puts '-----------------------------------'
+    # puts "ID: #{tweet.id}"
+    # puts "USER ID: #{tweet.user.id}"
+    # puts "USER NAME: #{tweet.user.name}"
+    # puts "USER SCREEN NAME: #{tweet.user.screen_name}"
+    # puts "TEXT: #{tweet.text}"
+    # puts "CURRENT TIME: #{Time.current}"
+    # puts '-----------------------------------'
 
     NewTweetWorker.perform_async(
       tweet.id,
@@ -43,6 +43,7 @@ rescue ::Twitter::Error::TooManyRequests => e
   text += "#{e.rate_limit.remaining}\n"
   text += "#{e.rate_limit.reset_at}\n"
   text += "#{e.rate_limit.reset_in}"
+  puts text
 
   TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
   raise e
