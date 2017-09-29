@@ -35,7 +35,9 @@ begin
 
   end
 rescue ::Twitter::Error::TooManyRequests => e
-  text = "Twitter bot stopped working\n"
+  text = "Twitter bot stopped working 'TooManyRequests'\n"
+  puts text
+
   text += "#{Time.current}\n"
   text += "#{e.inspect}\n"
   text += "#{e.rate_limit.inspect}\n"
@@ -46,5 +48,15 @@ rescue ::Twitter::Error::TooManyRequests => e
   puts text
 
   TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
-  raise e
+  sleep e.rate_limit.reset_in + 1
+  retry
+rescue Exception => e
+  text = "Twitter bot stopped working 'Exception'\n"
+  puts text
+
+  text += "#{e.message}\n"
+  text += "#{e.backtrace.inspect}\n"
+  puts text
+
+  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
 end
