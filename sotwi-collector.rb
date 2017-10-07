@@ -11,7 +11,12 @@ class NewTweetWorker
 end
 
 begin
-  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: "Bot is started\n Server time: #{Time.current}")
+  if TELEGRAM_SHOULD_WORKS
+    TELEGRAM_BOT.api.send_message(
+      chat_id: TELEGRAM_CHAT_ID,
+      text: "Bot is started\n Server time: #{Time.current}"
+    )
+  end
 
   TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
     puts "ID: #{tweet.id}"
@@ -67,7 +72,7 @@ rescue ::Twitter::Error::TooManyRequests => e
   text += "#{e.rate_limit.reset_in}"
   puts text
 
-  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
+  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text) if TELEGRAM_SHOULD_WORKS
   sleep e.rate_limit.reset_in + 1
   retry
 rescue Exception => e
@@ -80,5 +85,5 @@ rescue Exception => e
   text += "#{e.backtrace.inspect}\n"
   puts text
 
-  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
+  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text) if TELEGRAM_SHOULD_WORKS
 end
