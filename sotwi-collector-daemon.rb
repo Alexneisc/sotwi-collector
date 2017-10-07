@@ -6,4 +6,5 @@ Daemons.run(
   dir_mode: :normal,
   log_output: true,
   monitor: true,
+  monitor_interval: 10,
 )

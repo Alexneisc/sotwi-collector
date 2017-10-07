@@ -19,23 +19,23 @@ begin
   end
 
   TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
-    puts "ID: #{tweet.id}"
-    puts "USER ID: #{tweet.user.id}"
-    puts "USER NAME: #{tweet.user.name}"
-    puts "USER SCREEN NAME: #{tweet.user.screen_name}"
-    puts "TEXT: #{tweet.text}"
-    puts "FULL TEXT: #{tweet.full_text}"
-    puts "CREATED AT: #{tweet.created_at}"
-    puts "CURRENT TIME: #{Time.current}"
-    puts "retweet?: #{tweet.retweet?}"
-    puts "retweeted_tweet: #{tweet.retweeted_tweet.id}"
-    puts '========'
-    puts "RETWEETED USER ID: #{tweet.retweeted_tweet.user.id}"
-    puts "RETWEETED USER NAME: #{tweet.retweeted_tweet.user.name}"
-    puts "RETWEETED USER SCREEN NAME: #{tweet.retweeted_tweet.user.screen_name}"
-    puts "RETWEETED FULL TEXT: #{tweet.retweeted_tweet.full_text}"
-    puts "RETWEETED CREATED AT: #{tweet.retweeted_tweet.created_at}"
-    puts '-----------------------------------'
+    # puts "ID: #{tweet.id}"
+    # puts "USER ID: #{tweet.user.id}"
+    # puts "USER NAME: #{tweet.user.name}"
+    # puts "USER SCREEN NAME: #{tweet.user.screen_name}"
+    # puts "TEXT: #{tweet.text}"
+    # puts "FULL TEXT: #{tweet.full_text}"
+    # puts "CREATED AT: #{tweet.created_at}"
+    # puts "CURRENT TIME: #{Time.current}"
+    # puts "retweet?: #{tweet.retweet?}"
+    # puts "retweeted_tweet: #{tweet.retweeted_tweet.id}"
+    # puts '========'
+    # puts "RETWEETED USER ID: #{tweet.retweeted_tweet.user.id}"
+    # puts "RETWEETED USER NAME: #{tweet.retweeted_tweet.user.name}"
+    # puts "RETWEETED USER SCREEN NAME: #{tweet.retweeted_tweet.user.screen_name}"
+    # puts "RETWEETED FULL TEXT: #{tweet.retweeted_tweet.full_text}"
+    # puts "RETWEETED CREATED AT: #{tweet.retweeted_tweet.created_at}"
+    # puts '-----------------------------------'
 
     NewTweetWorker.perform_async(
       Time.current,
