@@ -11,8 +11,9 @@ class NewTweetWorker
 end
 
 begin
-  if TELEGRAM_SHOULD_WORKS
-    TELEGRAM_BOT.api.send_message(
+  if TELEGRAM_ON
+    telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
+    telegram_bot.api.send_message(
       chat_id: TELEGRAM_CHAT_ID,
       text: "Bot is started\n Server time: #{Time.current}"
     )
@@ -72,7 +73,11 @@ rescue ::Twitter::Error::TooManyRequests => e
   text += "#{e.rate_limit.reset_in}"
   puts text
 
-  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text) if TELEGRAM_SHOULD_WORKS
+  if TELEGRAM_ON
+    telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
+    telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
+  end
+
   sleep e.rate_limit.reset_in + 1
   retry
 rescue Exception => e
@@ -83,5 +88,8 @@ rescue Exception => e
   text += "#{e.message}\n\n"
   puts text
 
-  TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text) if TELEGRAM_SHOULD_WORKS
+  if TELEGRAM_ON
+    telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
+    telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
+  end
 end
