@@ -12,10 +12,12 @@ end
 
 begin
   if TELEGRAM_ON
+    text = "Collector started\n"
+    text += "Server time: #{Time.current}"
     telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
     telegram_bot.api.send_message(
       chat_id: TELEGRAM_CHAT_ID,
-      text: "Collector started\n Server time: #{Time.current}"
+      text: text
     )
   end
 
