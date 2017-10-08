@@ -62,8 +62,6 @@ begin
   end
 rescue ::Twitter::Error::TooManyRequests => e
   text = "Twitter bot stopped working 'TooManyRequests'\n"
-  puts text
-
   text += "#{Time.current}\n"
   text += "#{e.inspect}\n"
   text += "#{e.rate_limit.inspect}\n"
@@ -71,8 +69,8 @@ rescue ::Twitter::Error::TooManyRequests => e
   text += "#{e.rate_limit.remaining}\n"
   text += "#{e.rate_limit.reset_at}\n"
   text += "#{e.rate_limit.reset_in}"
-  puts text
-
+  text += "Server time: #{Time.current}"
+  
   if TELEGRAM_ON
     telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
     telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
@@ -82,11 +80,9 @@ rescue ::Twitter::Error::TooManyRequests => e
   retry
 rescue Exception => e
   text = "Twitter bot stopped working 'Exception'\n"
-  puts text
-
   text += "Message:\n"
   text += "#{e.message}\n\n"
-  puts text
+  text += "Server time: #{Time.current}"
 
   if TELEGRAM_ON
     telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
