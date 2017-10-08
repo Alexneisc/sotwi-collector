@@ -63,7 +63,8 @@ begin
     )
   end
 rescue ::Twitter::Error::TooManyRequests => e
-  text = "Collector stopped working 'TooManyRequests'\n"
+  text = "Collector stopped working\n"
+  text += "'TooManyRequests'\n"
   text += "#{e.inspect}\n"
   text += "#{e.rate_limit.inspect}\n"
   text += "#{e.rate_limit.limit}\n"
@@ -80,7 +81,8 @@ rescue ::Twitter::Error::TooManyRequests => e
   sleep e.rate_limit.reset_in + 1
   retry
 rescue Exception => e
-  text = "Collector stopped working 'Exception'\n"
+  text = "Collector stopped working\n"
+  text += "'Exception'\n"
   text += "Message:\n"
   text += "#{e.message}\n"
   text += "Server time: #{Time.current}"
