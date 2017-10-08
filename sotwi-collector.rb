@@ -15,7 +15,7 @@ begin
     telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
     telegram_bot.api.send_message(
       chat_id: TELEGRAM_CHAT_ID,
-      text: "Bot started\n Server time: #{Time.current}"
+      text: "Collector started\n Server time: #{Time.current}"
     )
   end
 
@@ -61,14 +61,13 @@ begin
     )
   end
 rescue ::Twitter::Error::TooManyRequests => e
-  text = "Twitter bot stopped working 'TooManyRequests'\n"
-  text += "#{Time.current}\n"
+  text = "Collector stopped working 'TooManyRequests'\n"
   text += "#{e.inspect}\n"
   text += "#{e.rate_limit.inspect}\n"
   text += "#{e.rate_limit.limit}\n"
   text += "#{e.rate_limit.remaining}\n"
   text += "#{e.rate_limit.reset_at}\n"
-  text += "#{e.rate_limit.reset_in}"
+  text += "#{e.rate_limit.reset_in}\n"
   text += "Server time: #{Time.current}"
 
   if TELEGRAM_ON
@@ -79,9 +78,9 @@ rescue ::Twitter::Error::TooManyRequests => e
   sleep e.rate_limit.reset_in + 1
   retry
 rescue Exception => e
-  text = "Twitter bot stopped working 'Exception'\n"
+  text = "Collector stopped working 'Exception'\n"
   text += "Message:\n"
-  text += "#{e.message}\n\n"
+  text += "#{e.message}\n"
   text += "Server time: #{Time.current}"
 
   if TELEGRAM_ON
