@@ -15,7 +15,7 @@ begin
     telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
     telegram_bot.api.send_message(
       chat_id: TELEGRAM_CHAT_ID,
-      text: "Bot is started\n Server time: #{Time.current}"
+      text: "Bot started\n Server time: #{Time.current}"
     )
   end
 
@@ -70,7 +70,7 @@ rescue ::Twitter::Error::TooManyRequests => e
   text += "#{e.rate_limit.reset_at}\n"
   text += "#{e.rate_limit.reset_in}"
   text += "Server time: #{Time.current}"
-  
+
   if TELEGRAM_ON
     telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
     telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
