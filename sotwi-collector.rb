@@ -81,8 +81,6 @@ rescue Exception => e
 
   text += "Message:\n"
   text += "#{e.message}\n\n"
-  text += "Backtrace:\n"
-  text += "#{e.backtrace.inspect}\n"
   puts text
 
   TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text) if TELEGRAM_SHOULD_WORKS
