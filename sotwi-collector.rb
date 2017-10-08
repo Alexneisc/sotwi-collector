@@ -14,11 +14,8 @@ begin
   if TELEGRAM_ON
     text = "Collector started\n"
     text += "Server time: #{Time.current}"
-    telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
-    telegram_bot.api.send_message(
-      chat_id: TELEGRAM_CHAT_ID,
-      text: text
-    )
+
+    TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
   end
 
   TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
@@ -74,8 +71,7 @@ rescue ::Twitter::Error::TooManyRequests => e
   text += "Server time: #{Time.current}"
 
   if TELEGRAM_ON
-    telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
-    telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
+    TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
   end
 
   sleep e.rate_limit.reset_in + 1
@@ -88,7 +84,6 @@ rescue Exception => e
   text += "Server time: #{Time.current}"
 
   if TELEGRAM_ON
-    telegram_bot = Telegram::Bot::Client.new(TELEGRAM_TOKEN)
-    telegram_bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
+    TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
   end
 end
