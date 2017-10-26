@@ -40,3 +40,13 @@ task :status do
     end
   end
 end
+
+task :stop do
+  on roles(:app) do
+    within release_path do
+      with rack_env: fetch(:rack_env) do
+        execute :bundle, "exec ruby sotwi-collector-daemon.rb stop"
+      end
+    end
+  end
+end
