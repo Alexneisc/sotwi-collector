@@ -18,7 +18,7 @@ begin
     TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
   end
 
-  TWITTER_CLIENT.filter(track: TWITTER_TOPIC) do |tweet|
+  TWITTER_CLIENT.filter(track: TWITTER_TOPIC.join(',')) do |tweet|
     # puts "ID: #{tweet.id}"
     # puts "USER ID: #{tweet.user.id}"
     # puts "USER NAME: #{tweet.user.name}"
@@ -29,12 +29,14 @@ begin
     # puts "CURRENT TIME: #{Time.current}"
     # puts "retweet?: #{tweet.retweet?}"
     # puts "retweeted_tweet: #{tweet.retweeted_tweet.id}"
+    # puts "TAGS: #{tweet.hashtags.map(&:text).join(',')}"
     # puts '========'
     # puts "RETWEETED USER ID: #{tweet.retweeted_tweet.user.id}"
     # puts "RETWEETED USER NAME: #{tweet.retweeted_tweet.user.name}"
     # puts "RETWEETED USER SCREEN NAME: #{tweet.retweeted_tweet.user.screen_name}"
     # puts "RETWEETED FULL TEXT: #{tweet.retweeted_tweet.full_text}"
     # puts "RETWEETED CREATED AT: #{tweet.retweeted_tweet.created_at}"
+    # puts "RETWEETED TAGS: #{tweet.retweeted_tweet.hashtags.map(&:text).join(',')}"
     # puts '-----------------------------------'
 
     NewTweetWorker.perform_async(
@@ -46,7 +48,8 @@ begin
         'user_name': tweet.user.name,
         'user_screen_name': tweet.user.screen_name,
         'created_at': tweet.created_at,
-        'is_retweet': tweet.retweet?
+        'is_retweet': tweet.retweet?,
+        'tags': tweet.hashtags.map(&:text).join(','),
       },
       retweet_data = {
         'id': tweet.retweeted_tweet.id,
@@ -55,7 +58,8 @@ begin
         'user_name': tweet.retweeted_tweet.user.name,
         'user_screen_name': tweet.retweeted_tweet.user.screen_name,
         'created_at': tweet.retweeted_tweet.created_at,
-        'is_retweet': tweet.retweet?
+        'is_retweet': tweet.retweet?,
+        'tags': tweet.retweeted_tweet.hashtags.map(&:text).join(','),
       }
     )
   end
@@ -70,6 +74,8 @@ rescue ::Twitter::Error::TooManyRequests => e
   text += "#{e.rate_limit.reset_in}\n"
   text += "Server time: #{Time.current}"
 
+  # puts text
+
   if TELEGRAM_ON
     TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
   end
@@ -82,6 +88,8 @@ rescue Exception => e
   text += "Message:\n"
   text += "#{e.message}\n"
   text += "Server time: #{Time.current}"
+
+  # puts text
 
   if TELEGRAM_ON
     TELEGRAM_BOT.api.send_message(chat_id: TELEGRAM_CHAT_ID, text: text)
