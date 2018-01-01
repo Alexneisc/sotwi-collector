@@ -16,3 +16,5 @@
 config/twitter.rb
 config/sidekiq.rb
 config/telegram.rb
+config/deploy/production.rb
+config/deploy/knock.rb
