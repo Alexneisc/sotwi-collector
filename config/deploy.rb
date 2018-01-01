@@ -6,7 +6,7 @@ set :user, 'deploy'
 set :repo_url, 'git@bitbucket.org:alexneisc/sotwi-collector.git'
 
 set :rvm_type, :user
-set :rvm_ruby_version, '2.4.1@sotwi-collector'
+set :rvm_ruby_version, '2.4.3@sotwi-collector'
 set :rack_env, :production
 
 append :linked_files, 'config/twitter.rb', 'config/sidekiq.rb', 'config/telegram.rb'
