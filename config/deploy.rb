@@ -3,7 +3,7 @@ lock '3.9.0'
 
 set :application, 'sotwi-collector'
 set :user, 'deploy'
-set :repo_url, 'git@bitbucket.org:alexneisc/sotwi-collector.git'
+set :repo_url, 'git@github.com:alexneisc/sotwi-collector.git'
 
 set :rvm_type, :user
 set :rvm_ruby_version, '2.4.3@sotwi-collector'
